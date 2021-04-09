@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import Badge from '@material-ui/core/Badge';
 import SearchIcon from '@material-ui/icons/Search';
 import ShoppingCart from '@material-ui/icons/ShoppingCart';
+import useStorage from '../hooks/browser-storage';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +28,8 @@ const useStyles = makeStyles((theme) => ({
 
 const AppBar = () => {
   const classes = useStyles();
+  // Get total products in the cart from local storage
+  const [totalProducts] = useStorage('total', 0)
 
   return (
     <MuiAppBar position="static">
@@ -50,7 +53,7 @@ const AppBar = () => {
           />
           <div className={classes.section}>
             <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
+              <Badge badgeContent={totalProducts} color="secondary">
                 <ShoppingCart />
               </Badge>
             </IconButton>
