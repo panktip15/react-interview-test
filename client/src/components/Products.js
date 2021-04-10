@@ -6,6 +6,7 @@ import { gql } from "apollo-boost";
 import { Query } from "react-apollo";
 import ProductCard from "./ProductCard.jsx";
 import "./styles.css";
+import { Typography } from "@material-ui/core";
 
 const GET_PRODUCTS = gql`
   query GetProducts {
@@ -25,11 +26,19 @@ const GET_PRODUCTS = gql`
   }
 `;
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   loading: {
     position: "absolute",
     top: "50%",
     right: "50%",
+  },
+  wrapper: {
+    margin: theme.spacing(0, 6),
+  },
+  merchantName: {
+    textAlign: "center",
+    padding: theme.spacing(2),
+    marginTop: theme.spacing(4),
   },
 }));
 
@@ -60,17 +69,30 @@ const ProductsLists = ({ addProduct }) => {
           <>
             {merchants &&
               merchants.length > 0 &&
-              merchants.map(({ products }) => {
+              merchants.map(({ products, merchant }) => {
                 return (
-                  products &&
-                  products.length > 0 &&
-                  products.map((product) => {
-                    return (
-                      <Grid key={product.id} container justify="center">
-                        <ProductCard {...product} addProduct={addProduct} />
-                      </Grid>
-                    );
-                  })
+                  <div key={merchant} className={classes.wrapper}>
+                    <Typography
+                      className={classes.merchantName}
+                      variant="h5"
+                      color="primary"
+                    >
+                      {merchant}
+                    </Typography>
+                    <Grid key={products.id} container justify="center">
+                      {products &&
+                        products.length > 0 &&
+                        products.map((product) => {
+                          return (
+                            <ProductCard
+                              key={product.id}
+                              {...product}
+                              addProduct={addProduct}
+                            />
+                          );
+                        })}
+                    </Grid>
+                  </div>
                 );
               })}
           </>

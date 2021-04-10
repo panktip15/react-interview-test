@@ -14,7 +14,7 @@ import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: 345,
+    width: 350,
     margin: theme.spacing(1),
   },
   media: {
