@@ -5,7 +5,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { gql } from "apollo-boost";
 import { Query } from "react-apollo";
 import ProductCard from "./ProductCard.jsx";
-import "./styles.css";
 import { Typography } from "@material-ui/core";
 
 const GET_PRODUCTS = gql`
