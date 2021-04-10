@@ -8,7 +8,8 @@ import CardActions from "@material-ui/core/CardActions";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
 import Snackbar from "@material-ui/core/Snackbar";
-import Alert from '@material-ui/lab/Alert';
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,11 +20,18 @@ const useStyles = makeStyles((theme) => ({
     height: 0,
     paddingTop: "56.25%", // 16:9
   },
+  content: {
+    height: 100,
+  },
   cardActions: {
     display: 'flex',
     justifyContent: "flex-end",
     margin: theme.spacing(0, 1)
-  }
+  },
+  image: {
+    height: 50,
+    marginRight: theme.spacing(1)
+  },
 }));
 
 const ProductCard = ({ color, description, image, name, price, size, id, addProduct }) => {
@@ -48,8 +56,8 @@ const ProductCard = ({ color, description, image, name, price, size, id, addProd
           image={image}
           title={name}
         />
-        <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
+        <CardContent >
+          <Typography className={classes.content} variant="body2" color="textSecondary" component="p">
             Color: {color} <br />
             Size: {size} <br />
             {description}
@@ -66,13 +74,18 @@ const ProductCard = ({ color, description, image, name, price, size, id, addProd
         }}
         open={showAlert}
         autoHideDuration={6000}
-        onClose={handleCloseAlert}>
-        <Alert
-          onClose={handleCloseAlert}
-          variant="filled"
-          severity="success"
-        >{name} was added to your cart.</Alert>
-      </Snackbar>
+        onClose={handleCloseAlert}
+        message={<><img className={classes.image} src={image} alt="image of" /> {name} was added to your cart</>}
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={handleCloseAlert}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>}
+      />
     </>
   );
 }

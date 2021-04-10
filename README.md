@@ -1,58 +1,47 @@
 # Bonsai React Interview Test
 
-Welcome to the creative interview test at Shop Bonsai.
+A user can add a product and can update and remove the product when viewing the cart. Cart icon is only visible once the user clicks `Add to Cart` button. User can update or remove products from the cart modal. If the user removes all the items from the cart, the Modal will close and the cart button will disappear.
 
-This interview test simulates an environment that is similar to working at Shop Bonsai (very similar tech stack we run today). 
+## Summary:
 
-Scenario:
-You joined as the new member of a small start-up team. Together we are building a new app to sell cool 3rd party products! So far, the sales team worked tirelessly and managed to acquire over 50 merchants who each have different brands and products offerings. The developers have also been working hard and have created a home page and shop page to welcome the users and display the products of the newly acquired merchants.
+- User's cart items persist as they are stored in local storage.
+- Created a hook with all the logic and is called on the `LandingPage` component.
+- The props are then passed to the associated child components.
+- Added Material-ui for styling and adding an AppBar
 
-Goal:
-Your task is to add a new complete working feature that you feel will best demonstrate your capabilities as a team-member and have the largest positive impact on our customer. This implies that JUST updating the es-lint rules to include trailing commas, switching all space-characters in the code-base to tab-characters, and/or updating the .gitignore will score low. However, non-customer facing features such as validating data, unit-testing, creating a automatic-backups of the database, can score very high if done well.
+## Considerations
 
-**NOTE:** If you are interveiwing for a frontend role, you simply need to make a frontend feature!
+- We could have created a Context Provider for the Cart logic and then just used the associated props directly inside the components instead of passing them in.
+- We are storing the cart information in the local storage as the assumption is this is either a user using the application for the first time, or they are just browsing and have not signed in. If they already have an account with items in their cart (which would be stored in the database), the application will combine both items in the cart for the use and add the local storage items to the database. If the user accesses the application logged in, we would not be storing any items in the local storage and would be saved directly to the database.
 
-Here are some ideas for features that are missing from the app (you can use your own database or consider mockMerchantData.js as a database):
- - Clicking Buy does SOMETHING! This should add data to the database in a meaningful way and communicate to the user that such an action took place.
- - Ability to select a quantity to buy. The quantity should be stored in the database in a meaningful way, this data should be retrieved and displayed somewhere for the user.
- - Add a profile page to display user-related data. This data should be stored in the database and retrieved.
- - Allow users to login using social media. A record of the user being logged in should be stored in the database, retrieved and displayed (perhaps on a special admin-only page).
- - Select multiple items to buy together. Which items get selected/submitted should be stored meaningfully in the database.
- - Add a cart object to display selected items the user wants to buy. Store this information meaningfully in the database.
- - Organize the shop page for better browsing experience, adding filters for brands/merchants/products.
- - Ability to 'like' an item. Store which items got liked in the database, retrieve this information.
- - Searching for product by name/brand/merchant. Store searches meaningfully in the database.
- - Add loading-images so the screen isn't empty while data is loading. Add page visits and loading times to the database in a meaningful way.
- - Add a react testing-framework and create a test. Record the results in separate database for the QA team!
+## Next steps
 
-The following should be noted:
-1. Assume that if a piece of code/function is not working, it is a bug in the app (oh no!)
-2. Work with the data as if it were real. (Do not manipulate/transform the mockData files)
-3. You can make additional assumptions, please note them if they are critical to understanding the way a feature is implemented
-4. You can add multiple small features or one large feature
-5. Please document your changes well and make as many atomic commits as you feel are necessary for someone to track your changes
+### Tests
 
-Of your submission, the following will be evaluated:
-- Ability to work in a pre-existing React environment (front-end)
-- Ability to use existing data in the database (back-end)
-- Ability add/store/retrieve new data in the database (back-end)
-- Completeness of feature, works as a user would expect such a feature to work
-- Adopting and using best practices
-- Coding style
-- Attention to detail
-- Clarity in communicating the feature implemented (I highly recommend taking pictures and gifs)
+- Add unit tests to make sure the application runs as expected. Needed additional time to set up Jest with msw.
+- Would install Jest, msw, @testing-library. Add test setup files server and renderWithContext which would be used for all testing.
+- Tests would include mock response for Products,
+- Test Landing page and assert total products the DOM renders
+- Assert correct information is displayed in the ProductCard
+- Adding a product will display the Cart icon and correct number of items
+- Clicking on the Cart Icon will display a table with correct products and quantities
+- Test removing, and updating of products in the cart work as expected
 
-High scorers will be contacted via email within a week of acknowledgement of PR submission.
-Thank you and good luck for everyone who applied and submitted a PR.
+### Improvements in the current feature for better UX
+
+- Products page would update the button from "Add to Cart" to "update Quantity to show that the product is already added to the cart
+- Add quantity dropdown to the ProductCard to update quantity directly from the landing page.
+- Details page displaying more information of the product which would be a modal
+- Ability to clear the cart. Add a function `clearCart` to the `useUpdateCart` hook which will default to empty cart.
 
 ## Install
+
 1. Ensure `yarn` is installed
 
-
 ## Run
+
 1. `yarn dev`
 2. View at `http://localhost:8080/`
 
 It should look like this initially:
 ![Shop Page Default Look and browse](https://raw.githubusercontent.com/ShopBonsai/react-interview-test/master/docs/shopPage.gif)
-
