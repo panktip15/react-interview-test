@@ -3,7 +3,8 @@
 A user can add a product and can update and remove the product when viewing the cart. Cart icon is only visible once the user clicks `Add to Cart` button. User can update or remove products from the cart modal. If the user removes all the items from the cart, the Modal will close and the cart button will disappear.
 
 Working Feature:
-![Landing Page and interact with cart](https://share.getcloudapp.com/8LubP12B)
+![Screen+Recording+2021-04-10+at+11 13 05+AM](https://user-images.githubusercontent.com/30152454/114278615-e13b7080-99ed-11eb-8e44-305391c3dd35.gif)
+
 
 ## Summary:
 
