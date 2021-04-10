@@ -4,11 +4,16 @@ import AppBar from './AppBar.jsx';
 import Products from './Products';
 
 const LandingPage = () => {
-  const { addProduct, cartItems } = useUpdateCart();
+  const { cart, cartItemCount, addProduct, removeProduct, updateProduct } = useUpdateCart();
 
   return (
     <>
-      <AppBar cartItems={cartItems} />
+      <AppBar
+        cart={cart}
+        cartItemCount={cartItemCount}
+        removeProduct={removeProduct}
+        updateProduct={updateProduct}
+      />
       <Products addProduct={addProduct} />
     </>
   )

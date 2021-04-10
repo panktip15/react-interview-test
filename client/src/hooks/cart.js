@@ -25,16 +25,19 @@ export const useUpdateCart = () => {
   };
 
   const [cart, setCart] = useState(getInitialCart);
-  const cartItems = cart.reduce((total, { quantity }) => total + quantity, 0);
+  const cartItemCount = cart.reduce(
+    (total, { quantity }) => total + quantity,
+    0
+  );
 
-  const addProduct = (itemID, price) => {
-    let cartCopy = [...cart];
-    let existingItem = cartCopy.find((cartItem) => cartItem.ID === itemID);
+  const addProduct = ({ id, name, price, image }) => {
+    const cartCopy = [...cart];
+    const existingItem = cartCopy.find((cartItem) => cartItem.ID === id);
 
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      cartCopy.push({ ID: itemID, quantity: 1, price });
+      cartCopy.push({ ID: id, quantity: 1, price, image, name });
     }
     setCart(cartCopy);
   };
@@ -45,12 +48,12 @@ export const useUpdateCart = () => {
     setCart(updatedCart);
   };
 
-  const updateProduct = (itemID, amount) => {
+  const updateProduct = (itemID, quantity) => {
     const cartCopy = [...cart];
     let existentItem = cartCopy.find((item) => item.ID == itemID);
 
     if (!existentItem) return;
-    existentItem.quantity = amount;
+    existentItem.quantity = quantity;
 
     if (existentItem.quantity <= 0) {
       removeProduct(itemID);
@@ -63,5 +66,5 @@ export const useUpdateCart = () => {
     localStorage.setItem(CART, JSON.stringify(cart));
   }, [cart]);
 
-  return { cart, cartItems, addProduct, removeProduct, updateProduct };
+  return { cart, cartItemCount, addProduct, removeProduct, updateProduct };
 };

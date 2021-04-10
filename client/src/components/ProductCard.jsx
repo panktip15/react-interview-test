@@ -33,7 +33,7 @@ const ProductCard = ({ color, description, image, name, price, size, id, addProd
   const [showAlert, setShowAlert] = useState(false);
 
   const handleAddProduct = () => {
-    addProduct(id, price)
+    addProduct({ id, name, price, image })
     setShowAlert(true)
   }
   const handleCloseAlert = () => setShowAlert(false)
