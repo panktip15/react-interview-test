@@ -1,5 +1,7 @@
 import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { gql } from "apollo-boost";
 import { Query } from "react-apollo";
 import ProductCard from "./ProductCard.jsx";
@@ -23,42 +25,59 @@ const GET_PRODUCTS = gql`
   }
 `;
 
-const ProductsLists = ({ addProduct }) => (
-  <Query query={GET_PRODUCTS}>
-    {({ data, error, loading }) => {
-      if (loading || !data) {
-        return <div>loading...</div>;
-      }
+const useStyles = makeStyles(() => ({
+  loading: {
+    position: "absolute",
+    top: "50%",
+    right: "50%",
+  },
+}));
 
-      if (error) {
+const ProductsLists = ({ addProduct }) => {
+  const classes = useStyles();
+  return (
+    <Query query={GET_PRODUCTS}>
+      {({ data, error, loading }) => {
+        if (loading || !data) {
+          return (
+            <div className={classes.loading}>
+              <CircularProgress size={40} thickness={4} />
+              <br />
+              Loading
+            </div>
+          );
+        }
+
+        if (error) {
+          return (
+            <div>
+              <pre>{error.message}</pre>
+            </div>
+          );
+        }
+        const merchants = (data && data.merchants) || [];
         return (
-          <div>
-            <pre>{error.message}</pre>
-          </div>
+          <>
+            {merchants &&
+              merchants.length > 0 &&
+              merchants.map(({ products }) => {
+                return (
+                  products &&
+                  products.length > 0 &&
+                  products.map((product) => {
+                    return (
+                      <Grid key={product.id} container justify="center">
+                        <ProductCard {...product} addProduct={addProduct} />
+                      </Grid>
+                    );
+                  })
+                );
+              })}
+          </>
         );
-      }
-      const merchants = (data && data.merchants) || [];
-      return (
-        <>
-          {merchants &&
-            merchants.length > 0 &&
-            merchants.map(({ products }) => {
-              return (
-                products &&
-                products.length > 0 &&
-                products.map((product) => {
-                  return (
-                    <Grid key={product.id} container justify="center">
-                      <ProductCard {...product} addProduct={addProduct} />
-                    </Grid>
-                  );
-                })
-              );
-            })}
-        </>
-      );
-    }}
-  </Query>
-);
+      }}
+    </Query>
+  );
+};
 
 export default ProductsLists;
