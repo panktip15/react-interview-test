@@ -35,14 +35,13 @@ const AppBar = ({ cart, cartItemCount, removeProduct, updateProduct }) => {
             Bonsai
           </Typography>
           <div className={classes.cart}>
-            <IconButton
+            {cartItemCount !== 0 && <IconButton
               onClick={() => setDisplayCart(true)}
-              disabled={cartItemCount === 0}
             >
               <Badge badgeContent={cartItemCount} color="secondary">
                 <ShoppingCart fontSize="large" />
               </Badge>
-            </IconButton>
+            </IconButton>}
           </div>
         </Toolbar>
       </MuiAppBar>

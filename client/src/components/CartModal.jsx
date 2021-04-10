@@ -37,7 +37,7 @@ function CartModal({
   updateProduct
 }) {
   const classes = useStyles();
-
+  if (cart.length === 0) handleClose();
   return (
     <Dialog
       open={open}
@@ -94,11 +94,13 @@ function CartModal({
               </TableRow>
             )
           })}
-          <TableCell>Total</TableCell>
-          <TableCell />
-          <TableCell />
-          <TableCell>$ {cart.reduce((total, { price, quantity }) => total + (price * quantity), 0).toFixed(2)}</TableCell>
-          <TableCell />
+          <TableRow>
+            <TableCell>Total</TableCell>
+            <TableCell />
+            <TableCell />
+            <TableCell>$ {cart.reduce((total, { price, quantity }) => total + (price * quantity), 0).toFixed(2)}</TableCell>
+            <TableCell />
+          </TableRow>
         </TableBody>
       </Table>
     </Dialog>
