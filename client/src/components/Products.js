@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import Grid from "@material-ui/core/Grid";
 import { gql } from "apollo-boost";
 import { Query } from "react-apollo";
@@ -23,51 +23,42 @@ const GET_PRODUCTS = gql`
   }
 `;
 
-const withProducts = (Component) => (props) => {
-  return (
-    <Query query={GET_PRODUCTS}>
-      {({ loading, data }) => {
-        return (
-          <Component
-            merchantsLoading={loading}
-            merchants={data && data.merchants}
-            {...props}
-          />
-        );
-      }}
-    </Query>
-  );
-};
+const ProductsLists = ({ addProduct }) => (
+  <Query query={GET_PRODUCTS}>
+    {({ data, error, loading }) => {
+      if (loading || !data) {
+        return <div>loading...</div>;
+      }
 
-class ProductsList extends Component {
-  showProducts() {
-    const { merchants, merchantsLoading } = this.props;
-
-    if (!merchantsLoading && merchants && merchants.length > 0) {
-      return merchants.map(({ products }) => {
+      if (error) {
         return (
-          products &&
-          products.length > 0 &&
-          products.map((product) => {
-            return (
-              <Grid key={product.id} container justify="center">
-                <ProductCard {...product} />
-              </Grid>
-            );
-          })
+          <div>
+            <pre>{error.message}</pre>
+          </div>
         );
-      });
-    } else {
+      }
+      const merchants = (data && data.merchants) || [];
       return (
-        <div>
-          <h3>No products available</h3>
-        </div>
+        <>
+          {merchants &&
+            merchants.length > 0 &&
+            merchants.map(({ products }) => {
+              return (
+                products &&
+                products.length > 0 &&
+                products.map((product) => {
+                  return (
+                    <Grid key={product.id} container justify="center">
+                      <ProductCard {...product} addProduct={addProduct} />
+                    </Grid>
+                  );
+                })
+              );
+            })}
+        </>
       );
-    }
-  }
+    }}
+  </Query>
+);
 
-  render() {
-    return <div>{this.showProducts()}</div>;
-  }
-}
-export default withProducts(ProductsList);
+export default ProductsLists;

@@ -4,61 +4,41 @@ import MuiAppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import TextField from '@material-ui/core/TextField';
 import Badge from '@material-ui/core/Badge';
-import SearchIcon from '@material-ui/icons/Search';
 import ShoppingCart from '@material-ui/icons/ShoppingCart';
-import { useUpdateCart } from '../hooks/cart';
 
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   toolbar: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
-  input: {
-    color: theme.palette.common.white,
-    height: 40
-  },
-  section: {
-    display: 'flex',
+  cart: {
+    border: "1px solid black",
+    borderRadius: '5px',
+    position: "fixed",
+    right: 0,
+    top: '50%'
   },
 }));
 
-const AppBar = () => {
+const AppBar = ({ cartItems }) => {
   const classes = useStyles();
-  // Get total products in the cart from local storage
-  const { total: totalProducts, cart } = useUpdateCart();
-  console.log({ cart, totalProducts })
+
   return (
     <MuiAppBar position="static">
       <Toolbar className={classes.toolbar}>
-        <Typography variant="h6" noWrap>
+        <Typography variant="h4" noWrap>
           Bonsai
           </Typography>
-        <div className={classes.toolbar}>
-
-          <TextField
-            id="input-with-icon-textfield"
-            variant="filled"
-            InputProps={{
-              className: classes.input,
-              startAdornment: (
-                <InputAdornment position="start" >
-                  <SearchIcon className={classes.input} />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <div className={classes.section}>
-            <IconButton color="inherit">
-              <Badge badgeContent={totalProducts} color="secondary">
-                <ShoppingCart />
-              </Badge>
-            </IconButton>
-          </div>
+        <div className={classes.cart}>
+          <IconButton>
+            <Badge badgeContent={cartItems} color="secondary">
+              <ShoppingCart fontSize="large" />
+            </Badge>
+          </IconButton>
         </div>
+
       </Toolbar>
     </MuiAppBar>
   );

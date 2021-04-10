@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
 
+/*
+ * We are assuming that the user is not logged in and are saving the users cart * in the local storage once the user signs in, we would then get their cart
+ * from the database, and combine the cart items.
+ * If the user is already logged in, we would add logic to store cart items
+ * directly to the database and not utilize the local storage
+ */
+
 export const useUpdateCart = () => {
   // eslint-disable-next-line no-undef
   const storage = window.localStorage;
@@ -18,16 +25,16 @@ export const useUpdateCart = () => {
   };
 
   const [cart, setCart] = useState(getInitialCart);
-  const total = cart.reduce((total, { quantity }) => total + quantity, 0);
+  const cartItems = cart.reduce((total, { quantity }) => total + quantity, 0);
 
-  const addProduct = (itemID) => {
+  const addProduct = (itemID, price) => {
     let cartCopy = [...cart];
     let existingItem = cartCopy.find((cartItem) => cartItem.ID === itemID);
 
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      cartCopy.push({ ID: itemID, quantity: 1 });
+      cartCopy.push({ ID: itemID, quantity: 1, price });
     }
     setCart(cartCopy);
   };
@@ -56,5 +63,5 @@ export const useUpdateCart = () => {
     localStorage.setItem(CART, JSON.stringify(cart));
   }, [cart]);
 
-  return { cart, total, addProduct, removeProduct, updateProduct };
+  return { cart, cartItems, addProduct, removeProduct, updateProduct };
 };
