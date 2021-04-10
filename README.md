@@ -2,6 +2,9 @@
 
 A user can add a product and can update and remove the product when viewing the cart. Cart icon is only visible once the user clicks `Add to Cart` button. User can update or remove products from the cart modal. If the user removes all the items from the cart, the Modal will close and the cart button will disappear.
 
+Working Feature:
+![Landing Page and interact with cart](https://share.getcloudapp.com/8LubP12B)
+
 ## Summary:
 
 - User's cart items persist as they are stored in local storage.
@@ -42,6 +45,3 @@ A user can add a product and can update and remove the product when viewing the 
 
 1. `yarn dev`
 2. View at `http://localhost:8080/`
-
-It should look like this initially:
-![Shop Page Default Look and browse](https://raw.githubusercontent.com/ShopBonsai/react-interview-test/master/docs/shopPage.gif)
