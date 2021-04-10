@@ -1,11 +1,14 @@
-import React, { Component } from 'react';
-import { CardTitle, CardSubtitle, CardText, Button, CardBody, Media } from 'reactstrap';
-import { gql } from 'apollo-boost';
-import { Query } from 'react-apollo';
-import './styles.css';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { gql } from "apollo-boost";
+import { Query } from "react-apollo";
+import ProductCard from "./ProductCard.jsx";
+import { Typography } from "@material-ui/core";
 
 const GET_PRODUCTS = gql`
-  {
+  query GetProducts {
     merchants {
       guid
       merchant
@@ -22,59 +25,80 @@ const GET_PRODUCTS = gql`
   }
 `;
 
-const withProducts = Component => props => {
+const useStyles = makeStyles((theme) => ({
+  loading: {
+    position: "absolute",
+    top: "50%",
+    right: "50%",
+  },
+  wrapper: {
+    margin: theme.spacing(0, 6),
+  },
+  merchantName: {
+    textAlign: "center",
+    padding: theme.spacing(2),
+    marginTop: theme.spacing(4),
+  },
+}));
+
+const ProductsLists = ({ addProduct }) => {
+  const classes = useStyles();
   return (
     <Query query={GET_PRODUCTS}>
-      {({ loading, data }) => {
+      {({ data, error, loading }) => {
+        if (loading || !data) {
+          return (
+            <div className={classes.loading}>
+              <CircularProgress size={40} thickness={4} />
+              <br />
+              Loading
+            </div>
+          );
+        }
+
+        if (error) {
+          return (
+            <div>
+              <pre>{error.message}</pre>
+            </div>
+          );
+        }
+        const merchants = (data && data.merchants) || [];
         return (
-          <Component merchantsLoading={loading} merchants={data && data.merchants} {...props} />
+          <>
+            {merchants &&
+              merchants.length > 0 &&
+              merchants.map(({ products, merchant }) => {
+                return (
+                  <div key={merchant} className={classes.wrapper}>
+                    <Typography
+                      className={classes.merchantName}
+                      variant="h5"
+                      color="primary"
+                    >
+                      {merchant}
+                    </Typography>
+                    <Grid key={products.id} container justify="center">
+                      {products &&
+                        products.length > 0 &&
+                        products.map((product) => {
+                          return (
+                            <ProductCard
+                              key={product.id}
+                              {...product}
+                              addProduct={addProduct}
+                            />
+                          );
+                        })}
+                    </Grid>
+                  </div>
+                );
+              })}
+          </>
         );
       }}
     </Query>
   );
 };
 
-class ProductsList extends Component {
-  
-    showProducts() {
-      const { merchants, merchantsLoading } = this.props;
-  
-      if (!merchantsLoading && merchants && merchants.length > 0) {
-        return merchants.map(({products}) => {
-          return products && products.length > 0 && products.map(product => {
-            const { color, description, image, name, price, size } = product
-            return (
-              <Media key={product.id} className="product-card">
-              <Media left href="#">
-                <Media object src={image} alt="Product image cap" />
-                </Media>
-                <CardBody>
-                  <CardTitle style={{fontWeight: 600}}>{name}</CardTitle>
-                  <CardTitle>Price: {price}</CardTitle>
-                  <CardSubtitle>Color: {color}</CardSubtitle>
-                  <CardSubtitle>Size: {size}</CardSubtitle>
-                  <CardText>Details: {description}</CardText>
-                  <Button color="primary" size="lg" block>Buy</Button>
-                </CardBody>
-              </Media>
-            );
-          })
-        });
-      } else {
-        return (
-          <div>
-            <h3>No products available</h3>
-          </div>
-        );
-      }
-    }
-  
-    render() {
-      return (
-        <div>
-          {this.showProducts()}
-        </div>
-      );
-    }
-  }
-  export default withProducts(ProductsList)
+export default ProductsLists;
